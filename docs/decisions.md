@@ -30,3 +30,11 @@ Sensible choices made while building GreenGate, and places the Flagsmith docs di
 ## Identity check
 
 Bootstrap finishes by evaluating three identities against Development. `carbon_level` of `low`, `moderate`, and `high` must return `full`, `eco`, and `off`.
+
+## Plugin
+
+- `@greengate/flagsmith` has no runtime dependencies. `@flagsmith/nodejs` is an optional peer. The plugin takes a small `FlagsmithLike` client so tests do not import the SDK.
+- `evaluate` returns `source` for who chose the variant (`flagsmith`, `override`, or `local`) and `carbonSource` for the reading (`electricity-maps`, `simulated`, `stale-cache`, or `default`). The brief listed a single `source` field. Both are returned so the demo can show the grid source and prove the decision came from Flagsmith.
+- No `ELECTRICITY_MAPS_TOKEN` is configured on this machine. The simulated provider is the fallback, and `scripts/print-carbon-levels.mjs` says so. A token in the environment switches the same script to live IN-SO, DE, and FR calls.
+- Cache: 15 minutes fresh, then stale up to 6 hours on provider failure, then carbon level `moderate` with `carbonSource: default`.
+- Zone order: explicit zone, `grid_zone` trait, lat/lon, `cf-ipcountry` or `x-vercel-ip-country`, then `IN-SO`. Unknown country codes fall through to the default.
