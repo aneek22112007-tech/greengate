@@ -1,0 +1,12 @@
+# Host port remap only. flagsmith/docker-compose.yml is the official file and is not edited.
+# Dashboard and API move from 8000 to 8100. The task processor moves from 8001 to 8101.
+# Experimentation is already on in the official file (EXPERIMENTATION_ENABLED=true).
+services:
+  flagsmith:
+    ports: !override
+      - "8100:8000"
+    environment:
+      FLAGSMITH_DOMAIN: localhost:8100
+  flagsmith-task-processor:
+    ports: !override
+      - "8101:8000"
