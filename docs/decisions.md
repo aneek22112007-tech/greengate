@@ -19,6 +19,14 @@ Sensible choices made while building GreenGate, and places the Flagsmith docs di
 - Each environment gets a server-side SDK key named "GreenGate server" and an organisation admin API key. Both are written to `.env` and never printed.
 - Each environment is connected to the Flagsmith Postgres warehouse (`warehouse_type: postgres`, `source: flagsmith_database`) so experimentation can store events. This follows the [local coding-agent setup](https://docs.flagsmith.com/getting-started/run-locally-with-a-coding-agent). The brief's step 1 did not mention the warehouse; the experimentation docs require it.
 
+## API differences found on this image
+
+- `GET /api/v1/environments/<numeric id>/` and `.../api-keys/` return 403 or 404. The working paths use the environment API key: `/api/v1/environments/<api_key>/` and `/api/v1/environments/<api_key>/api-keys/`.
+- Feature states are listed the same way: `/api/v1/environments/<api_key>/featurestates/`.
+- Warehouse connections need the admin user token (`Authorization: Token ...`). Calling them with only `X-Environment-Key` returns 401. A connected row comes back with `"status": "connected"`.
+- Multivariate options accept a `key` field. Bootstrap sets `full`, `eco`, and `off` so later exposures are counted.
+- The admin password is written to `.env` as soon as the user is created, so a later failure can still log in on the next run.
+
 ## Identity check
 
 Bootstrap finishes by evaluating three identities against Development. `carbon_level` of `low`, `moderate`, and `high` must return `full`, `eco`, and `off`.
