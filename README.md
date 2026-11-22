@@ -48,6 +48,8 @@ docker compose up -d --force-recreate demo
 
 Then open [http://localhost:3000](http://localhost:3000). The Flagsmith dashboard is [http://localhost:8100](http://localhost:8100). The admin password is written only to the gitignored `.env`.
 
+A new Docker volume creates the admin user during bootstrap. If this machine already has that volume, put the existing `.env` in the clone before the second command. Bootstrap will not invent a second password.
+
 The first `docker compose up` starts the demo before `.env` exists. Compose still parses, because the env file is optional. The third command restarts the demo so it can see the server key bootstrap just wrote. Dev tools on the page can force low, moderate, or high. The variant still comes from Flagsmith.
 
 Checks, from a clone:
