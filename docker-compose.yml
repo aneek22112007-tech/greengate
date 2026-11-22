@@ -1,0 +1,32 @@
+# One command for Flagsmith and the news reader.
+# The Flagsmith project name matches the stack started from flagsmith/.
+name: flagsmith
+include:
+  - path: flagsmith/docker-compose.yml
+  - path: flagsmith/docker-compose.override.yml
+
+services:
+  flagsmith:
+    ports: !override
+      - "8100:8000"
+  flagsmith-task-processor:
+    ports: !override
+      - "8101:8000"
+  demo:
+    build:
+      context: .
+      dockerfile: apps/demo/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: "3000"
+      NODE_ENV: development
+      FLAGSMITH_API_URL: http://flagsmith:8000/api/v1/
+      FLAGSMITH_EVENTS_URL: http://flagsmith:8000/api/
+      GREENGATE_DEFAULT_ZONE: IN-SO
+    env_file:
+      - path: .env
+        required: false
+    depends_on:
+      flagsmith:
+        condition: service_started

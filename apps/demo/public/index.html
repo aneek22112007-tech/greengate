@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GreenGate News Reader</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <a class="skip" href="#story">Skip to the story</a>
+    <header class="mast">
+      <div>
+        <p class="kicker">GreenGate News</p>
+        <h1>The reader that gets quieter when the grid is dirty.</h1>
+      </div>
+      <p class="mast-note">AI Summary is the heavy feature. Flagsmith decides full, eco, or off.</p>
+    </header>
+    <div class="layout">
+      <aside class="rail" id="rail" aria-label="Grid and articles"></aside>
+      <main id="story" tabindex="-1"></main>
+    </div>
+    <script src="/app.js"></script>
+  </body>
+</html>
