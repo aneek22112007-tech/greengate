@@ -21,7 +21,7 @@ On 23 November 2026, `https://www.iea.org/reports/key-questions-on-energy-and-ai
 
 ## Bootstrap
 
-- Admin user: `greengate-admin@example.com`. The password is generated on first run and stored only in the gitignored `.env`.
+- Admin user: `greengate-admin@example.com`. The password is generated on first run and stored only in the gitignored `.env`. Signup works only while Flagsmith has no users. A new Docker volume takes that path. If the volume already exists, bootstrap reads `FLAGSMITH_ADMIN_PASSWORD` from `.env` and reuses that admin. Copy the existing `.env` into the clone before bootstrap.
 - Organisation and project are both named GreenGate. Environments are Development and Production.
 - `heavy_feature_mode` is a multivariate flag. The control value is `full`. Variations are `full`, `eco`, and `off`, each with a stable key and a default weight of 0. Weights stay at 0 so segment overrides, not a random split, decide the variant. Keys are required later: Flagsmith drops exposures for a variation that has no key ([Run an experiment](https://docs.flagsmith.com/experimentation/run-an-experiment)).
 - `greengate_enabled` is a boolean flag, default on. The plugin treats off as "always full".
