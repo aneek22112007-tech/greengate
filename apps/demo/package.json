@@ -3,5 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "GreenGate News Reader. Implementation lands in step 3."
+  "description": "GreenGate News Reader. The heavy feature is an AI summary that Flagsmith can set to full, eco, or off.",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "node dist/server.js",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@flagsmith/nodejs": "^9.2.0",
+    "@greengate/flagsmith": "^0.1.0",
+    "cookie-parser": "^1.4.7",
+    "express": "^4.22.3"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.8",
+    "@types/express": "^4.17.21",
+    "tsx": "^4.20.6"
+  }
 }
