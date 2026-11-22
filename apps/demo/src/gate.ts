@@ -32,6 +32,9 @@ export function createDemoRuntime(): DemoRuntime {
         enableEvents: true,
         eventProcessorConfig: {
           eventsApiUrl: process.env.FLAGSMITH_EVENTS_URL || 'http://localhost:8100/api/',
+          maxBuffer: 100,
+          flushInterval: 2000,
+          requestTimeoutMs: 15000,
         },
       })
     : null;

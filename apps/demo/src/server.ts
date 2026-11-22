@@ -41,24 +41,58 @@ function forceLevelFrom(req: Request): CarbonLevel | undefined {
   return isCarbonLevel(level) ? level : undefined;
 }
 
+const VARIANTS = new Set<Evaluation['variant']>(['full', 'eco', 'off']);
+
+function trafficLabelFor(req: Request, identifier: string): 'SIMULATED' | null {
+  if (identifier.startsWith('sim-') || req.get('x-gg-simulated') === '1' || req.query.simulated === '1') {
+    return 'SIMULATED';
+  }
+  return null;
+}
+
 async function decide(identifier: string, level: CarbonLevel | undefined): Promise<Evaluation> {
   const evaluation = await gate.evaluate(identifier, undefined, {
     forceLevel: level,
     zone: process.env.GREENGATE_ZONE || undefined,
   });
+  let variant = evaluation.variant;
+  let experimentId: number | null = null;
+  let experimentVariant: string | null = null;
+  if (flagsmith && evaluation.flags.greengate_enabled) {
+    const flag = await flagsmith.getExperimentFlag('heavy_feature_mode', identifier, {
+      carbon_level: evaluation.carbonLevel,
+      grid_zone: evaluation.zone,
+      greengate_suggested_variant: evaluation.flags.greengate_suggested_variant,
+    });
+    experimentVariant = 'variant' in flag && typeof flag.variant === 'string' ? flag.variant : null;
+    if ('experiment' in flag && flag.experiment?.inExperiment && typeof flag.value === 'string' && VARIANTS.has(flag.value as Evaluation['variant'])) {
+      variant = flag.value as Evaluation['variant'];
+      experimentId = flag.experiment.id;
+    }
+  }
+  const result: Evaluation =
+    variant === evaluation.variant
+      ? evaluation
+      : {
+          ...evaluation,
+          variant,
+          flags: { ...evaluation.flags, heavy_feature_mode: variant },
+        };
   console.log(
     JSON.stringify({
       msg: 'greengate.decision',
       identifier,
-      variant: evaluation.variant,
-      carbonLevel: evaluation.carbonLevel,
-      zone: evaluation.zone,
-      source: evaluation.source,
-      carbonSource: evaluation.carbonSource,
-      from: evaluation.source === 'flagsmith' ? 'flagsmith' : evaluation.source,
+      variant: result.variant,
+      carbonLevel: result.carbonLevel,
+      zone: result.zone,
+      source: result.source,
+      carbonSource: result.carbonSource,
+      from: result.source === 'flagsmith' ? 'flagsmith' : result.source,
+      experimentId,
+      experimentVariant,
     }),
   );
-  return evaluation;
+  return result;
 }
 
 async function summaryFor(slug: string, body: string, variant: Evaluation['variant']): Promise<Summary | null> {
@@ -97,6 +131,7 @@ app.get('/api/feed', async (req, res, next) => {
     const energy = estimateEnergy(evaluation.variant, evaluation.zone, ARTICLES.length);
     res.json({
       identifier,
+      trafficLabel: trafficLabelFor(req, identifier),
       devTools,
       decision: evaluation,
       energy,
@@ -135,6 +170,7 @@ app.get('/api/articles/:slug', async (req, res, next) => {
     const energy = estimateEnergy(evaluation.variant, evaluation.zone, 1);
     res.json({
       article,
+      trafficLabel: trafficLabelFor(req, identifier),
       summary,
       decision: evaluation,
       energy,
@@ -154,11 +190,17 @@ app.post('/api/events', (req, res) => {
     return;
   }
   const value = typeof req.body?.value === 'number' ? req.body.value : undefined;
-  console.log(JSON.stringify({ msg: 'greengate.event', name, identifier, slug: req.body?.slug ?? null }));
+  const trafficLabel = trafficLabelFor(req, identifier);
+  console.log(JSON.stringify({ msg: 'greengate.event', name, identifier, slug: req.body?.slug ?? null, trafficLabel }));
   if (flagsmith) {
     flagsmith.trackEvent(name, { identifier, value });
   }
-  res.json({ ok: true, simulated: false, recorded: Boolean(flagsmith) });
+  res.json({ ok: true, simulated: trafficLabel === 'SIMULATED', trafficLabel, recorded: Boolean(flagsmith) });
+});
+
+app.post('/api/events/flush', async (_req, res) => {
+  await flagsmith?.flushEvents();
+  res.json({ ok: true });
 });
 
 app.use(express.static(publicDir));

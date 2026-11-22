@@ -92,7 +92,12 @@ function renderRail() {
         </div>
       </section>`
     : '';
+  const simulated =
+    state.feed.trafficLabel === 'SIMULATED'
+      ? `<p class="sim-banner" role="status">SIMULATED traffic. This is not a live reader.</p>`
+      : '';
   rail.innerHTML = `
+    ${simulated}
     <section class="panel" aria-label="Carbon">
       <h2>Grid</h2>
       <div class="meta">

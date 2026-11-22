@@ -69,6 +69,18 @@ body {
   color: var(--muted);
 }
 
+.sim-note { max-width: 36ch; margin-top: 0.6rem; }
+
+.sim-banner {
+  margin: 0 0 0.8rem;
+  padding: 0.45rem 0.6rem;
+  background: var(--amber-bg);
+  color: var(--amber);
+  border: 1px solid var(--amber);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
 .layout {
   display: grid;
   grid-template-columns: 320px 1fr;

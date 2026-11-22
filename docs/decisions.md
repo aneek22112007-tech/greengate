@@ -47,3 +47,14 @@ Bootstrap finishes by evaluating three identities against Development. `carbon_l
 - Energy figures are estimates: 0.3 Wh live, 0.05 Wh cached, 0.2 Wh autoplay, default 450 gCO₂/kWh. Zone intensities in `energy.ts` are assumptions for the meter.
 - The dev panel is hidden when `NODE_ENV=production`. Forcing a level still sends `carbon_level` to Flagsmith. The server log line `greengate.decision` records `from: flagsmith`.
 - Root `docker-compose.yml` includes the Flagsmith stack under the project name `flagsmith` and adds the demo on port 3000. Inside the compose network the API URL is `http://flagsmith:8000/api/v1/`. Compose `include` concatenated the official ports with the override, so the root file sets `ports: !override` again. Host port 8000 is already taken by another local stack and is left alone.
+
+## Experiment
+
+- Hypothesis: eco mode does not reduce session completion compared with full. Flag `heavy_feature_mode`, control value `full`, eco at 50%, rollout 100% in Development only.
+- Carbon segment overrides win over the experiment rollout segment (they are created at priority 0 and 1; the rollout segment takes the next priority). Both `carbon_high` and `carbon_moderate` are deleted in Development for the run. Keeping only the high override would still pull every moderate identity (the demo's simulated default) out of the random split. Production is untouched.
+- The demo calls `getExperimentFlag` on `@flagsmith/nodejs` after `evaluate`, with the same identity and the same carbon traits, so an enrolled reader records one exposure. Conversions use that same id on `article_completed`.
+- Ending the experiment is `POST /experiments/<id>/complete/` on this image. The coding-agent doc's start and `results/refresh` paths match. A completed experiment cannot be restarted.
+- The coding-agent example lists only the treatment variation and lets control take the rest. This image returns 400 `Must include all feature's variants` unless every multivariate option is in the rollout. Setup sends full=0, eco=50, off=0. Control remains the flag value `full` (variant key `control` in Flagsmith). The demo still renders the flag value, so readers see `full` or `eco`.
+- Feature states on this image return 405 for DELETE. Removing the feature-segment is what clears an override.
+- Restore sets the experiment rollout to 0% and completes the experiment, then recreates the two carbon overrides and rechecks low → full, moderate → eco, high → off. After the percentage was set to 0, the rollout feature-segment was already gone.
+- Traffic from `scripts/simulate-traffic.mjs` is labelled `SIMULATED` on the API, in the page banner for those ids, in the README, and in `docs/experiment-results.md`. A normal browser session is not labelled that way. The event response field `simulated` is true only for that traffic.

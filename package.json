@@ -17,7 +17,11 @@
     "dev": "npm run dev -w @greengate/demo",
     "flagsmith:up": "docker compose -f flagsmith/docker-compose.yml -f flagsmith/docker-compose.override.yml up -d",
     "flagsmith:down": "docker compose -f flagsmith/docker-compose.yml -f flagsmith/docker-compose.override.yml down",
-    "bootstrap": "node scripts/bootstrap-flagsmith.mjs"
+    "bootstrap": "node scripts/bootstrap-flagsmith.mjs",
+    "experiment:setup": "node scripts/setup-experiment.mjs",
+    "experiment:traffic": "node scripts/simulate-traffic.mjs",
+    "experiment:report": "node scripts/experiment-report.mjs",
+    "experiment:restore": "node scripts/restore-carbon-routing.mjs"
   },
   "engines": {
     "node": ">=20"
