@@ -2,6 +2,16 @@
 
 Sensible choices made while building GreenGate, and places the Flagsmith docs disagreed with the project brief. The docs win when they disagree.
 
+Sections: stack, bootstrap, API differences, identity check, plugin, demo, experiment, sources.
+
+## Typecheck
+
+The demo imports `@greengate/flagsmith` through the package `exports`, which point at `dist`. A fresh clone has no `dist`, so the root `typecheck` script builds the plugin before it typechecks the demo.
+
+## Sources
+
+On 23 November 2026, `https://www.iea.org/reports/key-questions-on-energy-and-ai` and `https://www.iea.org/news/data-centre-electricity-use-surged-in-2025-even-with-tightening-bottlenecks-driving-a-scramble-for-solutions` both returned an IP-recognition sign-in wall. The README quotes carbon and electricity figures only from the Guardian article of 19 November 2026, which did load. The report’s executive summary was readable at a child URL and is not quoted, so the README does not add numbers from a page the brief did not name.
+
 ## Stack
 
 - npm workspaces, TypeScript, Node 20+. Conda is not used.
