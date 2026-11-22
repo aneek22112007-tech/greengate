@@ -38,3 +38,12 @@ Bootstrap finishes by evaluating three identities against Development. `carbon_l
 - No `ELECTRICITY_MAPS_TOKEN` is configured on this machine. The simulated provider is the fallback, and `scripts/print-carbon-levels.mjs` says so. A token in the environment switches the same script to live IN-SO, DE, and FR calls.
 - Cache: 15 minutes fresh, then stale up to 6 hours on provider failure, then carbon level `moderate` with `carbonSource: default`.
 - Zone order: explicit zone, `grid_zone` trait, lat/lon, `cf-ipcountry` or `x-vercel-ip-country`, then `IN-SO`. Unknown country codes fall through to the default.
+
+## Demo
+
+- The news reader is Express plus a static page, not Next.js. One process is enough, and the variant decision stays on the server.
+- Full mode uses an animated hero placeholder instead of a video file. Eco mode uses a still. Off mode shows the sentence "Paused because the grid is dirty right now".
+- Summaries are a local extractive stand-in unless `LLM_API_KEY` and `LLM_BASE_URL` are both set. Eco summaries are cached. The label says which one you are reading.
+- Energy figures are estimates: 0.3 Wh live, 0.05 Wh cached, 0.2 Wh autoplay, default 450 gCO₂/kWh. Zone intensities in `energy.ts` are assumptions for the meter.
+- The dev panel is hidden when `NODE_ENV=production`. Forcing a level still sends `carbon_level` to Flagsmith. The server log line `greengate.decision` records `from: flagsmith`.
+- Root `docker-compose.yml` includes the Flagsmith stack under the project name `flagsmith` and adds the demo on port 3000. Inside the compose network the API URL is `http://flagsmith:8000/api/v1/`. Compose `include` concatenated the official ports with the override, so the root file sets `ports: !override` again. Host port 8000 is already taken by another local stack and is left alone.
