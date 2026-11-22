@@ -1,0 +1,25 @@
+{
+  "name": "greengate",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Carbon-aware feature flags for Flagsmith.",
+  "license": "MIT",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -p packages/greengate/tsconfig.json --noEmit && tsc -p apps/demo/tsconfig.json --noEmit",
+    "build": "npm run build -w @greengate/flagsmith && npm run build -w @greengate/demo",
+    "dev": "npm run dev -w @greengate/demo",
+    "flagsmith:up": "docker compose -f flagsmith/docker-compose.yml -f flagsmith/docker-compose.override.yml up -d",
+    "flagsmith:down": "docker compose -f flagsmith/docker-compose.yml -f flagsmith/docker-compose.override.yml down",
+    "bootstrap": "node scripts/bootstrap-flagsmith.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

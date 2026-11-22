@@ -1,0 +1,7 @@
+{
+  "name": "@greengate/demo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "GreenGate News Reader. Implementation lands in step 3."
+}
