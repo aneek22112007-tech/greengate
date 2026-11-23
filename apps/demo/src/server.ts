@@ -58,16 +58,21 @@ async function decide(identifier: string, level: CarbonLevel | undefined): Promi
   let variant = evaluation.variant;
   let experimentId: number | null = null;
   let experimentVariant: string | null = null;
-  if (flagsmith && evaluation.flags.greengate_enabled) {
-    const flag = await flagsmith.getExperimentFlag('heavy_feature_mode', identifier, {
-      carbon_level: evaluation.carbonLevel,
-      grid_zone: evaluation.zone,
-      greengate_suggested_variant: evaluation.flags.greengate_suggested_variant,
-    });
-    experimentVariant = 'variant' in flag && typeof flag.variant === 'string' ? flag.variant : null;
-    if ('experiment' in flag && flag.experiment?.inExperiment && typeof flag.value === 'string' && VARIANTS.has(flag.value as Evaluation['variant'])) {
-      variant = flag.value as Evaluation['variant'];
-      experimentId = flag.experiment.id;
+  // source 'local' means Flagsmith could not be reached, so skip the experiment lookup too.
+  if (flagsmith && evaluation.source === 'flagsmith' && evaluation.flags.greengate_enabled) {
+    try {
+      const flag = await flagsmith.getExperimentFlag('heavy_feature_mode', identifier, {
+        carbon_level: evaluation.carbonLevel,
+        grid_zone: evaluation.zone,
+        greengate_suggested_variant: evaluation.flags.greengate_suggested_variant,
+      });
+      experimentVariant = 'variant' in flag && typeof flag.variant === 'string' ? flag.variant : null;
+      if ('experiment' in flag && flag.experiment?.inExperiment && typeof flag.value === 'string' && VARIANTS.has(flag.value as Evaluation['variant'])) {
+        variant = flag.value as Evaluation['variant'];
+        experimentId = flag.experiment.id;
+      }
+    } catch (error) {
+      console.log(JSON.stringify({ msg: 'greengate.experiment_flag_failed', message: error instanceof Error ? error.message : String(error) }));
     }
   }
   const result: Evaluation =
