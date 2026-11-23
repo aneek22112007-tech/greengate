@@ -1,17 +1,14 @@
 # One command for Flagsmith and the news reader.
 # The Flagsmith project name matches the stack started from flagsmith/.
 name: flagsmith
+# Both files are merged as one include. Listing them as two includes, or redefining
+# their services here, makes Compose fail with "conflicts with imported resource".
 include:
-  - path: flagsmith/docker-compose.yml
-  - path: flagsmith/docker-compose.override.yml
+  - path:
+      - flagsmith/docker-compose.yml
+      - flagsmith/docker-compose.override.yml
 
 services:
-  flagsmith:
-    ports: !override
-      - "8100:8000"
-  flagsmith-task-processor:
-    ports: !override
-      - "8101:8000"
   demo:
     build:
       context: .

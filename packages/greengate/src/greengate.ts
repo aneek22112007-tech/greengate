@@ -111,7 +111,13 @@ export function createGreenGate(options: GreenGateOptions = {}): GreenGate {
         return result(suggested, reading, 'local', true, suggested);
       }
 
-      const remote = await options.flagsmith.getIdentityFlags(identifier, identityTraits);
+      let remote: Awaited<ReturnType<FlagsmithLike['getIdentityFlags']>>;
+      try {
+        remote = await options.flagsmith.getIdentityFlags(identifier, identityTraits);
+      } catch {
+        // Flagsmith is unreachable or errored. Serve the local carbon mapping instead of failing the request.
+        return result(suggested, reading, 'local', true, suggested);
+      }
       const enabled = remote.isFeatureEnabled('greengate_enabled');
       const remoteValue = remote.getFeatureValue('heavy_feature_mode');
       const remoteVariant: Variant = isVariant(remoteValue) ? remoteValue : suggested;
