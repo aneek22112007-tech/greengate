@@ -8,7 +8,7 @@ import type { GlobeScene, Pose } from './scene';
 gsap.registerPlugin(ScrollTrigger);
 document.documentElement.classList.add('js');
 
-const DEMO_URL = (import.meta.env.VITE_DEMO_URL as string | undefined) || 'https://greengate-demo.vercel.app';
+const DEMO_URL = (import.meta.env.VITE_DEMO_URL as string | undefined) || 'https://greengate-demo.onrender.com';
 const REPO_URL = 'https://github.com/aneek22112007-tech/greengate';
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const mobile = window.matchMedia('(max-width: 760px), (pointer: coarse)').matches;
