@@ -37,7 +37,7 @@ const decision = await gate.evaluate('user-42');
 | `carbonLevel` | `low`, `moderate`, or `high`. |
 | `zone` | Electricity Maps zone, for example `IN-SO`. |
 | `simulated` | True when the carbon reading was not a live Electricity Maps call. |
-| `source` | Who chose the variant: `flagsmith`, `override`, or `local`. |
+| `source` | Who chose the variant: `flagsmith`, `override`, or `local` (no Flagsmith client, or Flagsmith could not be reached). |
 | `carbonSource` | `electricity-maps`, `simulated`, `stale-cache`, or `default`. |
 | `flags` | `greengate_enabled`, `heavy_feature_mode`, and `greengate_suggested_variant`. |
 

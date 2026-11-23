@@ -41,6 +41,22 @@ describe('createGreenGate', () => {
     });
   });
 
+  it('falls back to the local mapping when Flagsmith is unreachable', async () => {
+    const gate = createGreenGate({
+      flagsmith: {
+        async getIdentityFlags() {
+          throw new Error('connect ECONNREFUSED');
+        },
+      },
+      mockLevel: 'high',
+      mode: 'traits',
+    });
+    const evaluation = await gate.evaluate('user-down');
+    expect(evaluation.variant).toBe('off');
+    expect(evaluation.source).toBe('local');
+    expect(evaluation.flags.greengate_suggested_variant).toBe('off');
+  });
+
   it('forces full when the kill switch is off', async () => {
     const gate = createGreenGate({
       flagsmith: fakeFlagsmith('off', false),
