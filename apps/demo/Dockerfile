@@ -3,6 +3,7 @@ WORKDIR /app
 COPY package.json package-lock.json tsconfig.base.json ./
 COPY packages/greengate/package.json packages/greengate/
 COPY apps/demo/package.json apps/demo/
+COPY apps/landing/package.json apps/landing/
 RUN npm ci
 COPY packages/greengate packages/greengate
 COPY apps/demo apps/demo
