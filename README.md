@@ -2,6 +2,10 @@
 
 Carbon-aware feature flags for [Flagsmith](https://www.flagsmith.com/). When the grid is dirty, the heavy feature gets quieter. Flagsmith makes that decision.
 
+**Live:** [3D landing page](https://greengate-a31z.onrender.com) · [News Reader demo](https://greengate-demo.onrender.com)
+
+The hosted demo has no public Flagsmith instance. It runs the plugin's local mapping (`source: local`) on a simulated carbon level, and its dev tools let you force low, moderate or high. Both run on Render's free tier, so the first request after a quiet spell can take about a minute. The full self-hosted Flagsmith path is the Quickstart below.
+
 ![GreenGate News Reader on a low-carbon grid, full mode](docs/demo-low.png)
 
 ## 30 seconds
@@ -58,6 +62,17 @@ Checks, from a clone:
 npm ci
 npm run typecheck && npm test && npm run build
 ```
+
+## Landing page
+
+`apps/landing` is a Vite site with a three.js globe, GSAP scroll choreography and an interactive full/eco/off playground. The 3D scene is lazy-loaded, caps pixel ratio on phones, and stays still under `prefers-reduced-motion`. Globe zone colours are illustrative, not live readings.
+
+```bash
+npm run dev -w @greengate/landing      # http://localhost:5173
+npm run build -w @greengate/landing    # apps/landing/dist
+```
+
+Set `VITE_DEMO_URL` at build time to point the demo buttons somewhere else. `npm run build:vercel -w @greengate/demo` writes a self-contained Vercel deploy folder for the demo to `apps/demo/deploy/vercel`.
 
 ## Use GreenGate in your app
 
