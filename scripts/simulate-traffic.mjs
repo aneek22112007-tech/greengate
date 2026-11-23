@@ -134,6 +134,8 @@ async function main() {
 
   const variants = {};
   let cursor = 1;
+  // Users finish out of order with concurrency, so checks and progress use the finished count.
+  let finished = 0;
   const startedAt = new Date().toISOString();
 
   async function worker() {
@@ -143,16 +145,17 @@ async function main() {
       const { variant, bucket } = await oneUser(index);
       if (!variants[variant]) variants[variant] = emptyBucket();
       addInto(variants[variant], bucket);
-      if (index === 40) {
+      finished += 1;
+      if (finished === 40) {
         const full = variants.full?.n || 0;
         const eco = variants.eco?.n || 0;
-        log(`early split full=${full} eco=${eco} other=${index - full - eco}`);
+        log(`early split full=${full} eco=${eco} other=${finished - full - eco}`);
         if (full < 5 || eco < 5) {
           throw new Error('The first 40 SIMULATED users were not split across full and eco. Stop and check the experiment.');
         }
       }
-      if (index % 200 === 0) {
-        log(`progress ${index}/${USERS} ${JSON.stringify(variants)}`);
+      if (finished % 200 === 0) {
+        log(`progress ${finished}/${USERS} ${JSON.stringify(variants)}`);
       }
     }
   }
