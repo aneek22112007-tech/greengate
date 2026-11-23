@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>GreenGate · Carbon-aware feature flags for Flagsmith</title>
+    <meta name="description" content="GreenGate reads the carbon intensity of the grid serving each user and lets Flagsmith dial your heaviest feature to full, eco, or off." />
+    <meta name="theme-color" content="#030807" />
+    <meta property="og:title" content="GreenGate · Features that breathe with the grid" />
+    <meta property="og:description" content="Carbon-aware feature flags for Flagsmith. One multivariate flag: full, eco, off." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  </head>
+  <body data-level="moderate">
+    <a class="skip" href="#main">Skip to content</a>
+
+    <div class="stage" aria-hidden="true">
+      <canvas id="gl"></canvas>
+      <div class="stage-fallback"></div>
+      <div class="stage-vignette"></div>
+      <div class="grain"></div>
+    </div>
+
+    <header class="nav" id="nav">
+      <a class="brand" href="#top" aria-label="GreenGate home">
+        <span class="brand-mark" aria-hidden="true"><span></span></span>
+        <span>GreenGate</span>
+      </a>
+      <nav aria-label="Sections">
+        <a href="#problem">Why</a>
+        <a href="#playground">Playground</a>
+        <a href="#how">How it works</a>
+        <a href="#experiment">Experiment</a>
+        <a href="#plugin">Plugin</a>
+      </nav>
+      <div class="nav-cta">
+        <a class="btn btn-ghost btn-sm" data-repo href="https://github.com/aneek22112007-tech/greengate" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+        <a class="btn btn-primary btn-sm" data-demo href="#">Live demo</a>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- HERO -->
+      <section class="hero" id="top" data-scene="hero">
+        <div class="hero-copy">
+          <p class="eyebrow reveal"><span class="pulse-dot" aria-hidden="true"></span> Toggle Wars · Track 03 · Self-hosted Flagsmith</p>
+          <h1 class="display reveal">
+            Features that <span class="grad">breathe</span><br />with the grid.
+          </h1>
+          <p class="lede reveal">
+            GreenGate reads the carbon intensity of the grid serving each user and hands it to Flagsmith as an identity trait.
+            Flagsmith dials your heaviest feature to <b class="v-full">full</b>, <b class="v-eco">eco</b> or <b class="v-off">off</b>. No redeploys. One flag.
+          </p>
+          <div class="hero-ctas reveal">
+            <a class="btn btn-primary btn-lg" data-demo href="#">Try the live demo <span aria-hidden="true">→</span></a>
+            <a class="btn btn-ghost btn-lg" data-repo href="https://github.com/aneek22112007-tech/greengate" target="_blank" rel="noopener">View the source</a>
+          </div>
+          <ul class="map-chips reveal" aria-label="Default strict mapping">
+            <li><span class="dot dot-low"></span>low <i>→</i> <code>full</code></li>
+            <li><span class="dot dot-moderate"></span>moderate <i>→</i> <code>eco</code></li>
+            <li><span class="dot dot-high"></span>high <i>→</i> <code>off</code></li>
+          </ul>
+        </div>
+
+        <aside class="hud glass reveal" aria-label="Example flag evaluation">
+          <div class="hud-head">
+            <span class="hud-title">evaluate(<span id="hud-uid">"user-42"</span>)</span>
+            <span class="hud-tag">illustrative</span>
+          </div>
+          <dl class="hud-rows">
+            <div><dt>grid_zone</dt><dd id="hud-zone">IN-SO</dd></div>
+            <div><dt>carbon_level</dt><dd id="hud-level" class="lvl">moderate</dd></div>
+            <div><dt>source</dt><dd>flagsmith</dd></div>
+            <div class="hud-big"><dt>heavy_feature_mode</dt><dd id="hud-variant" class="var">eco</dd></div>
+          </dl>
+          <div class="hud-bar" aria-hidden="true"><span id="hud-bar"></span></div>
+        </aside>
+
+        <a class="scroll-cue" href="#problem" aria-label="Scroll to the next section"><span></span></a>
+      </section>
+
+      <!-- MARQUEE -->
+      <div class="marquee" aria-label="Built with">
+        <div class="marquee-track">
+          <span>Flagsmith</span><span>Electricity Maps</span><span>TypeScript</span><span>Node 20+</span><span>Express</span><span>Docker Compose</span><span>Multivariate flags</span><span>Identity traits</span><span>Segments</span><span>Experiments</span>
+          <span aria-hidden="true">Flagsmith</span><span aria-hidden="true">Electricity Maps</span><span aria-hidden="true">TypeScript</span><span aria-hidden="true">Node 20+</span><span aria-hidden="true">Express</span><span aria-hidden="true">Docker Compose</span><span aria-hidden="true">Multivariate flags</span><span aria-hidden="true">Identity traits</span><span aria-hidden="true">Segments</span><span aria-hidden="true">Experiments</span>
+        </div>
+      </div>
+
+      <!-- PROBLEM -->
+      <section class="section" id="problem" data-scene="problem">
+        <div class="section-head">
+          <p class="kicker reveal">01 · The problem</p>
+          <h2 class="reveal">Compute is getting heavier.<br /><span class="muted">The grid is not getting cleaner fast enough.</span></h2>
+        </div>
+        <div class="stats">
+          <article class="stat glass reveal tilt">
+            <p class="stat-num"><span data-count="70">0</span>%</p>
+            <p>more carbon emissions from datacentres by 2030.</p>
+          </article>
+          <article class="stat glass reveal tilt">
+            <p class="stat-num"><span data-count="2">0</span>×</p>
+            <p>the electricity datacentres consume by 2030. AI accounts for three-quarters of that growth.</p>
+          </article>
+          <article class="stat glass reveal tilt">
+            <p class="stat-num"><span data-count="350">0</span><small> TWh</small></p>
+            <p>extra a year for AI datacentres within four years. More than Great Britain uses annually.</p>
+          </article>
+          <article class="stat glass reveal tilt">
+            <p class="stat-num">~<span data-count="60">0</span>%</p>
+            <p>of US datacentre electricity expected to come from gas by 2030.</p>
+          </article>
+        </div>
+        <p class="source reveal">
+          Figures as printed in Jillian Ambrose,
+          <a href="https://www.theguardian.com/world/2026/nov/19/datacentres-to-create-70-more-carbon-emissions-by-2030-iea-report-warns" target="_blank" rel="noopener">“Datacentres to create 70% more carbon emissions by 2030, IEA report warns”</a>,
+          <i>The Guardian</i>, 19 November 2026, reporting International Energy Agency findings.
+        </p>
+        <p class="thesis reveal">GreenGate does not shrink a datacentre. It gives your app <em>one flag</em> so the expensive path can step down when the grid serving that user is dirty.</p>
+      </section>
+
+      <!-- PLAYGROUND -->
+      <section class="section" id="playground" data-scene="playground">
+        <div class="section-head">
+          <p class="kicker reveal">02 · Playground</p>
+          <h2 class="reveal">Flip the grid.<br /><span class="muted">Watch the flag follow.</span></h2>
+        </div>
+
+        <div class="play">
+          <div class="play-controls glass reveal">
+            <fieldset class="seg" id="level-picker">
+              <legend>Carbon intensity level</legend>
+              <label class="seg-opt seg-low"><input type="radio" name="level" value="low" /><span>Low</span></label>
+              <label class="seg-opt seg-moderate"><input type="radio" name="level" value="moderate" checked /><span>Moderate</span></label>
+              <label class="seg-opt seg-high"><input type="radio" name="level" value="high" /><span>High</span></label>
+            </fieldset>
+            <fieldset class="seg seg-small" id="preset-picker">
+              <legend>Mapping preset</legend>
+              <label class="seg-opt"><input type="radio" name="preset" value="strict" checked /><span>strict</span></label>
+              <label class="seg-opt"><input type="radio" name="preset" value="gentle" /><span>gentle</span></label>
+            </fieldset>
+
+            <div class="switch3d-wrap" aria-hidden="true">
+              <div class="switch3d" id="switch3d" data-variant="eco">
+                <div class="sw-track">
+                  <span class="sw-stop">full</span><span class="sw-stop">eco</span><span class="sw-stop">off</span>
+                </div>
+                <div class="sw-knob"><div class="sw-face sw-top"></div><div class="sw-face sw-front"></div><div class="sw-face sw-side"></div></div>
+              </div>
+            </div>
+            <p class="flag-out" aria-live="polite">
+              <code>heavy_feature_mode</code> = <strong id="variant-out" class="var">eco</strong>
+            </p>
+            <p class="tiny">Strict: low→full, moderate→eco, high→off. Gentle: low→full, moderate→full, high→eco. Same presets as <code>packages/greengate/src/mapping.ts</code>.</p>
+          </div>
+
+          <div class="reader glass reveal" id="reader" data-variant="eco">
+            <div class="reader-bar"><span></span><span></span><span></span><p>GreenGate News Reader</p></div>
+            <div class="reader-hero">
+              <div class="rh-anim" aria-hidden="true"><i></i><i></i><i></i></div>
+              <p class="rh-cap" id="rh-cap">Still image. Autoplay is off in eco.</p>
+            </div>
+            <p class="reader-kicker">Energy · 4 min read</p>
+            <h3 class="reader-title">The city that shifted its laundry to the windy hours</h3>
+            <div class="reader-summary">
+              <p class="rs-label"><span class="rs-chip" id="rs-chip">Cached summary</span> AI Summary</p>
+              <p class="rs-body" id="rs-body">A cached two-line summary, generated once and reused. No new model call on this request.</p>
+            </div>
+            <div class="meter">
+              <div><span class="m-label">Energy per article</span><span class="m-val" id="m-wh">0.05 Wh</span></div>
+              <div><span class="m-label">Saved vs always-full</span><span class="m-val" id="m-saved">90%</span></div>
+              <div class="m-track" aria-hidden="true"><span id="m-fill"></span></div>
+              <p class="tiny">Estimate, not a measurement. Model from <code>apps/demo/src/energy.ts</code>: live summary 0.3 Wh, autoplay 0.2 Wh, cached summary 0.05 Wh.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- HOW -->
+      <section class="section" id="how" data-scene="how">
+        <div class="section-head">
+          <p class="kicker reveal">03 · How it works</p>
+          <h2 class="reveal">Carbon becomes a trait.<br /><span class="muted">Flagsmith makes the call.</span></h2>
+        </div>
+        <ol class="flow" id="flow">
+          <svg class="flow-line" viewBox="0 0 1000 20" preserveAspectRatio="none" aria-hidden="true"><path id="flow-path" d="M0 10 H1000" /></svg>
+          <li class="flow-step glass reveal"><span class="fs-n">1</span><h3>Request</h3><p>A reader opens an article. A stable id comes from the <code>gg_uid</code> cookie or <code>x-gg-uid</code> header.</p></li>
+          <li class="flow-step glass reveal"><span class="fs-n">2</span><h3>Read the grid</h3><p>Electricity Maps <code>carbon-intensity-level/latest</code> returns low, moderate or high for the zone. Cached 15 min, stale up to 6 h.</p></li>
+          <li class="flow-step glass reveal"><span class="fs-n">3</span><h3>Send traits</h3><p><code>carbon_level</code> and <code>grid_zone</code> go to Flagsmith as identity traits. No hard overrides.</p></li>
+          <li class="flow-step glass reveal"><span class="fs-n">4</span><h3>Segments decide</h3><p>Self-hosted Flagsmith segments map the level to a variant of the multivariate flag <code>heavy_feature_mode</code>.</p></li>
+          <li class="flow-step glass reveal"><span class="fs-n">5</span><h3>Feature adapts</h3><p><b class="v-full">full</b> live summary and motion. <b class="v-eco">eco</b> cached summary, still image. <b class="v-off">off</b> paused, with a plain explanation.</p></li>
+        </ol>
+        <div class="safety reveal">
+          <div class="glass"><h3>Kill switch</h3><p><code>greengate_enabled</code> off forces <code>full</code> when the product must stay on.</p></div>
+          <div class="glass"><h3>Flagsmith down?</h3><p>The plugin falls back to the local mapping and marks <code>source: local</code>. It recovers by itself.</p></div>
+          <div class="glass"><h3>No token?</h3><p>Without an Electricity Maps token the level is simulated, and the response says so.</p></div>
+        </div>
+      </section>
+
+      <!-- EXPERIMENT -->
+      <section class="section" id="experiment" data-scene="experiment">
+        <div class="section-head">
+          <p class="kicker reveal">04 · Experiment</p>
+          <h2 class="reveal">Does eco hurt reading?<br /><span class="muted">We asked Flagsmith, honestly.</span></h2>
+        </div>
+        <div class="exp">
+          <div class="exp-card glass reveal">
+            <span class="badge-sim">SIMULATED traffic</span>
+            <p class="exp-h">Hypothesis: eco mode does not reduce session completion compared with full.</p>
+            <div class="exp-bars">
+              <div class="eb"><span class="eb-label">full (control)</span><div class="eb-track"><span style="--w:61.1%"></span></div><span class="eb-val">61.1% <small>628/1027</small></span></div>
+              <div class="eb eb-eco"><span class="eb-label">eco</span><div class="eb-track"><span style="--w:61.5%"></span></div><span class="eb-val">61.5% <small>598/973</small></span></div>
+            </div>
+            <p class="tiny">2,000 readers from <code>scripts/simulate-traffic.mjs</code>. Real Flagsmith SDK events, simulated people.</p>
+          </div>
+          <div class="exp-card glass reveal">
+            <p class="exp-h">Flagsmith warehouse readout</p>
+            <div class="ci" aria-label="95% interval from minus 6.6% to plus 7.4%, point estimate plus 0.4%">
+              <div class="ci-axis"><span class="ci-zero"><i>0</i></span><span class="ci-range" style="--l:8.75%;--r:3.75%"></span><span class="ci-point" style="--x:52.5%"></span></div>
+              <div class="ci-ticks"><span>−8%</span><span>+8%</span></div>
+            </div>
+            <ul class="exp-kpis">
+              <li><b>55%</b><span>chance eco is best</span></li>
+              <li><b>+0.4%</b><span>lift</span></li>
+              <li><b>−6.6% … +7.4%</b><span>95% interval</span></li>
+            </ul>
+            <p class="tiny">The interval crosses zero, so this is not a win. It is evidence eco did not visibly hurt completion in simulation.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- PLUGIN -->
+      <section class="section" id="plugin" data-scene="plugin">
+        <div class="section-head">
+          <p class="kicker reveal">05 · Plugin</p>
+          <h2 class="reveal">One call in your app.<br /><span class="muted"><code>@greengate/flagsmith</code></span></h2>
+        </div>
+        <div class="code-wrap">
+          <div class="code glass reveal">
+            <div class="code-tabs" role="tablist" aria-label="Code examples">
+              <button role="tab" aria-selected="true" aria-controls="code-eval" id="tab-eval">evaluate.ts</button>
+              <button role="tab" aria-selected="false" aria-controls="code-mw" id="tab-mw" tabindex="-1">middleware.ts</button>
+              <button role="tab" aria-selected="false" aria-controls="code-run" id="tab-run" tabindex="-1">self-host.sh</button>
+              <button class="copy" id="copy-btn" type="button">Copy</button>
+            </div>
+<pre role="tabpanel" id="code-eval" aria-labelledby="tab-eval"><code><span class="k">import</span> { Flagsmith } <span class="k">from</span> <span class="s">'@flagsmith/nodejs'</span>;
+<span class="k">import</span> { createGreenGate } <span class="k">from</span> <span class="s">'@greengate/flagsmith'</span>;
+
+<span class="k">const</span> gate = <span class="f">createGreenGate</span>({
+  flagsmith: <span class="k">new</span> <span class="f">Flagsmith</span>({ environmentKey: process.env.FLAGSMITH_ENVIRONMENT_KEY! }),
+  electricityMapsToken: process.env.ELECTRICITY_MAPS_TOKEN,
+  mapping: <span class="s">'strict'</span>,   <span class="c">// low→full, moderate→eco, high→off</span>
+  mode: <span class="s">'traits'</span>,      <span class="c">// Flagsmith segments choose</span>
+});
+
+<span class="k">const</span> decision = <span class="k">await</span> gate.<span class="f">evaluate</span>(<span class="s">'user-42'</span>);
+<span class="c">// decision.variant → 'full' | 'eco' | 'off'</span></code></pre>
+<pre role="tabpanel" id="code-mw" aria-labelledby="tab-mw" hidden><code><span class="k">import</span> express <span class="k">from</span> <span class="s">'express'</span>;
+<span class="k">import</span> { greengateMiddleware } <span class="k">from</span> <span class="s">'@greengate/flagsmith'</span>;
+
+<span class="k">const</span> app = <span class="f">express</span>();
+app.<span class="f">use</span>(<span class="f">greengateMiddleware</span>(gate));   <span class="c">// attaches req.greengate</span>
+
+app.<span class="f">get</span>(<span class="s">'/article/:slug'</span>, (req, res) =&gt; {
+  <span class="k">const</span> { variant, carbonLevel, source } = req.greengate;
+  <span class="k">if</span> (variant === <span class="s">'off'</span>) <span class="k">return</span> res.<span class="f">json</span>({ summary: <span class="k">null</span> });
+  <span class="c">// full → live summary, eco → cached summary</span>
+});</code></pre>
+<pre role="tabpanel" id="code-run" aria-labelledby="tab-run" hidden><code><span class="c"># Flagsmith on :8100, demo on :3000</span>
+git clone https://github.com/aneek22112007-tech/greengate
+<span class="k">cd</span> greengate
+docker compose up -d
+node scripts/bootstrap-flagsmith.mjs
+docker compose up -d --force-recreate demo</code></pre>
+          </div>
+          <ul class="features reveal">
+            <li><b>Zero runtime deps</b><span><code>@flagsmith/nodejs</code> is an optional peer.</span></li>
+            <li><b>Traits or override</b><span>Let segments decide, or apply the local map and still record the trait.</span></li>
+            <li><b>Presets or custom</b><span><code>strict</code>, <code>gentle</code> or <code>low=full,moderate=eco,high=off</code>.</span></li>
+            <li><b>Resilient cache</b><span>15 min fresh, 6 h stale, then <code>moderate</code>. Failures are not cached.</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="section cta" id="cta" data-scene="cta">
+        <div class="cta-card glass reveal">
+          <h2>Make your heaviest feature<br /><span class="grad">grid-aware</span> today.</h2>
+          <p>Open the News Reader, force a dirty grid, and watch the summary step down.</p>
+          <div class="hero-ctas">
+            <a class="btn btn-primary btn-lg" data-demo href="#">Open the live demo <span aria-hidden="true">→</span></a>
+            <a class="btn btn-ghost btn-lg" data-repo href="https://github.com/aneek22112007-tech/greengate" target="_blank" rel="noopener">Star on GitHub</a>
+          </div>
+          <p class="tiny" id="demo-note">The hosted demo runs without a public Flagsmith instance, so it uses the plugin's local mapping and a simulated carbon level. Run it locally with Docker for the full self-hosted Flagsmith path.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div>
+        <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"><span></span></span><span>GreenGate</span></a>
+        <p>Built by ANEEK DAS for <a href="https://www.wemakedevs.org/hackathons/flagsmith" target="_blank" rel="noopener">Toggle Wars</a> by WeMakeDevs × Flagsmith.</p>
+      </div>
+      <div class="foot-links">
+        <a href="https://www.flagsmith.com/" target="_blank" rel="noopener">Flagsmith</a>
+        <a href="https://www.electricitymaps.com/" target="_blank" rel="noopener">Electricity Maps</a>
+        <a data-repo href="https://github.com/aneek22112007-tech/greengate" target="_blank" rel="noopener">GitHub</a>
+        <span>MIT licence</span>
+      </div>
+      <p class="tiny foot-note">Globe zone colours are illustrative and do not show live grid data.</p>
+    </footer>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
